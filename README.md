@@ -40,6 +40,15 @@ In order to verify a successfull connection run the following:
 
 `kubectl get nodes`
 
+### Kubernetes Dashboard
+
+To view the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) for your cluster run the following command:
+
+Azure CLI:
+
+`az aks browse --resource-group myAKSCluster --name myAKSCluster`
+
+
 ## Helm configuration
 
 Prior to deploying Helm in an RBAC-enabled cluster, you must create a service account and role binding for the Tiller service. 
