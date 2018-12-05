@@ -1,4 +1,4 @@
-# Installing Anchore Engine on Azure Kubernetes Service cluster with Helm
+# Installing Anchore Engine on an Azure Kubernetes Service cluster with Helm
 
 ## Introduction
 
