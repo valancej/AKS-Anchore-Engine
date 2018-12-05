@@ -9,6 +9,7 @@ In this post I will walkthrough deploying an AKS Cluster using the Azure CLI. On
 - [Azure Subscription](https://azure/com)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 - [Helm CLI](https://docs.helm.sh/using_helm/#installing-helm)
+- [Anchore CLI](https://github.com/anchore/anchore-cli)
 
 ## Create Azure resource group and AKS cluster
 
@@ -125,3 +126,41 @@ anchore-demo-anchore-engine-worker   1/1     1            1           5m36s
 anchore-demo-postgresql              1/1     1            1           5m36s
 ```
 
+Expose API port externally:
+
+`kubectl expose deployment anchore-demo-anchore-engine-core --type=LoadBalancer --name=anchore-engine --port=8228`
+
+Output:
+
+`service/anchore-engine exposed`
+
+View service and External IP:
+
+`kubectl get service anchore-engine`
+
+Output: 
+
+```
+NAME             TYPE           CLUSTER-IP    EXTERNAL-IP      PORT(S)          AGE
+anchore-engine   LoadBalancer   10.0.56.241   40.117.232.147   8228:31027/TCP   12m
+```
+
+Assuming you have the [Anchore-CLI](https://github.com/anchore/anchore-cli), you can pass the EXTERNAL-IP to the CLI as the `--url` paramenter.
+
+View the status of Anchore:
+
+`anchore-cli --url http://40.117.232.147:8228/v1 --u admin --p foobar system status`
+
+Output:
+
+```
+Service simplequeue (anchore-demo-anchore-engine-core-6447cb7464-cp295, http://anchore-demo-anchore-engine:8083): up
+Service analyzer (anchore-demo-anchore-engine-worker-746cf99f7c-rkprd, http://10.244.2.8:8084): up
+Service kubernetes_webhook (anchore-demo-anchore-engine-core-6447cb7464-cp295, http://anchore-demo-anchore-engine:8338): up
+Service policy_engine (anchore-demo-anchore-engine-core-6447cb7464-cp295, http://anchore-demo-anchore-engine:8087): up
+Service catalog (anchore-demo-anchore-engine-core-6447cb7464-cp295, http://anchore-demo-anchore-engine:8082): up
+Service apiext (anchore-demo-anchore-engine-core-6447cb7464-cp295, http://anchore-demo-anchore-engine:8228): up
+
+Engine DB Version: 0.0.7
+Engine Code Version: 0.2.4
+```
