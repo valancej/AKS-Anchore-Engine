@@ -106,3 +106,23 @@ Run the following command to create the account and role binding:
 To deploy Tiller in the AKS cluster run the following command:
 
 `helm init --service-account tiller`
+
+## Anchore install
+
+We will deploy Anchore engine via the lastest Helm Chart release. For a detailed description of the chart options view the Github repo: https://github.com/helm/charts/tree/master/stable/anchore-engine
+
+`helm install --name anchore-demo stable/anchore-engine`
+
+Following this we can use `kubectl get deployments` to show the deployments.
+
+Output: 
+
+```
+$ kubectl get deployments
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+anchore-cli                          1/1     1            1           5m17s
+anchore-demo-anchore-engine-core     1/1     1            1           5m36s
+anchore-demo-anchore-engine-worker   1/1     1            1           5m36s
+anchore-demo-postgresql              1/1     1            1           5m36s
+```
+
