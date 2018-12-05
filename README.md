@@ -165,8 +165,9 @@ Engine DB Version: 0.0.7
 Engine Code Version: 0.2.4
 ```
 
-You are now ready to being analyzing images
+It is recommended to add the URL, username, and password as environment variables to avoid passing them with every `anchore-cli` command. View repo for more info: https://github.com/anchore/anchore-cli
 
+You are now ready to being analyzing images
 
 ## Creating a container registry in Azure
 
@@ -230,7 +231,66 @@ sampledockerfiles
 
 Now that we have an image in ACR we can add the created registry to Anchore.
 
-## Adding the created registry to Anchore
+## Adding the created registry to Anchore and being analying images
 
 With the anchore-cli we can easily add the created container registry to Anchore and analyzed the image.
+
+- --registry-type: docker_v2
+- Registry: myregistryname.azurecr.io
+- Username: Username of ACR account
+- Password: Password of ACR account 
+
+To obtain the credentials of the ACR account run the following command:
+
+Azure CLI:
+
+`az acr credential show --name anchorecontainerregistry001`
+
+Output:
+
+```
+{
+  "passwords": [
+    {
+      "name": "password",
+      "value": "********"
+    },
+    {
+      "name": "password2",
+      "value": "********"
+    }
+  ],
+  "username": "anchoreContainerRegistry001"
+}
+```
+
+Run the following command to add the registry to Anchore:
+
+`anchore-cli registry add --registry-type <Type> <Registry> <Username> <Password>`
+
+View the added registry:
+
+`anchore-cli registry list`
+
+Output:
+
+```
+Registry                                      Type             User                               
+anchoreContainerRegistry001.azurecr.io        docker_v2        anchoreContainerRegistry001
+```
+
+Once with configured the registry we can analyze the image we just pushed to it with the following command:
+
+`anchore-cli image add anchoreContainerRegistry001.azurecr.io/sampledockerfiles:latest`
+
+We can view the analyzed image via the `image list` command:
+
+`anchore-cli image list`
+
+Output: 
+
+```
+Full Tag                                                               Image ID                                                                Analysis Status        
+anchoreContainerRegistry001.azurecr.io/sampledockerfiles:latest        be4e57961e68d275be8600c1d9411e33f58f1c2c025cf3af22e3901368e02fe1        analyzed             
+```
 
