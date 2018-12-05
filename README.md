@@ -107,7 +107,7 @@ To deploy Tiller in the AKS cluster run the following command:
 
 `helm init --service-account tiller`
 
-## Anchore install
+## Install Anchore
 
 We will deploy Anchore engine via the lastest Helm Chart release. For a detailed description of the chart options view the Github repo: https://github.com/helm/charts/tree/master/stable/anchore-engine
 
