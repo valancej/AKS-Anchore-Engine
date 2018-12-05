@@ -8,6 +8,7 @@ In this post I will walkthrough deploying an AKS Cluster using the Azure CLI. On
 
 - [Azure Subscription](https://azure/com)
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+- [Helm CLI](https://docs.helm.sh/using_helm/#installing-helm)
 
 ## Create Azure resource group and AKS cluster
 
@@ -39,3 +40,52 @@ In order to verify a successfull connection run the following:
 
 `kubectl get nodes`
 
+## Helm configuration
+
+Prior to deploying Helm in an RBAC-enabled cluster, you must create a service account and role binding for the Tiller service. 
+
+Create a file name `helm-rbac.yaml`: 
+
+```
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tiller
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: kube-dashboard
+rules:
+- apiGroups: ["*"]
+  resources: ["*"]
+  verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: tiller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: tiller
+    namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: rook-operator
+  namespace: rook-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: kube-dashboard
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-dashboard
+  namespace: kube-system
+```
