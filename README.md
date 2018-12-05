@@ -89,3 +89,11 @@ subjects:
   name: kubernetes-dashboard
   namespace: kube-system
 ```
+
+Run the following command to create the account and role binding:
+
+`kubectl apply -f helm-rbac.yaml`
+
+To deploy Tiller in the AKS cluster run the following command:
+
+`helm init --service-account tiller`
