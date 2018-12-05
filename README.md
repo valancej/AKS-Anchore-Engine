@@ -120,7 +120,6 @@ Output:
 ```
 $ kubectl get deployments
 NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
-anchore-cli                          1/1     1            1           5m17s
 anchore-demo-anchore-engine-core     1/1     1            1           5m36s
 anchore-demo-anchore-engine-worker   1/1     1            1           5m36s
 anchore-demo-postgresql              1/1     1            1           5m36s
