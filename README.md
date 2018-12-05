@@ -46,7 +46,7 @@ To view the [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) for 
 
 Azure CLI:
 
-`az aks browse --resource-group myAKSCluster --name myAKSCluster`
+`az aks browse --resource-group anchoreAKSCluster --name anchoreAKSCluster`
 
 
 ## Helm configuration
