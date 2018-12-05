@@ -294,3 +294,6 @@ Full Tag                                                               Image ID 
 anchoreContainerRegistry001.azurecr.io/sampledockerfiles:latest        be4e57961e68d275be8600c1d9411e33f58f1c2c025cf3af22e3901368e02fe1        analyzed             
 ```
 
+## Conclusion
+
+Following these examples we can see how simple it is to deploy a AKS cluster with a running Anchore Engine service. Addionally, if we are using ACR as a primary container registry, easy set up and configure Anchore to scan any images that reside within the registry.
