@@ -164,3 +164,73 @@ Service apiext (anchore-demo-anchore-engine-core-6447cb7464-cp295, http://anchor
 Engine DB Version: 0.0.7
 Engine Code Version: 0.2.4
 ```
+
+You are now ready to being analyzing images
+
+
+## Creating a container registry in Azure
+
+First create a resource group.
+
+Azure CLI:
+
+`az group create --name anchoreContainerRegistryGroup --location eastus`
+
+Create a container registry.
+
+Azure CLI:
+
+`az acr create --resource-group anchoreContainerRegistryGroup --name anchoreContainerRegistry001 --sku Basic`
+
+Verify login to create ACR.
+
+Azure CLI:
+
+`az acr login --name anchoreContainerRegistry001`
+
+## Push image to ACR
+
+In order to push an image to your newly created container registry you must have an image. I've already pulled an image from my Docker Hub account via the following command:
+
+`docker pull jvalance/sampledockerfiles:latest`
+
+Once I have the image locally, it needs to be tagged with the fully qualified name of the ACR login server. This can be obtained via the following command:
+
+Azure CLI:
+
+`az acr list --resource-group anchoreContainerRegistryGroup --query "[].{acrLoginServer:loginServer}" --output table`
+
+Output:
+
+```
+AcrLoginServer
+--------------------------------------
+anchorecontainerregistry001.azurecr.io
+```
+
+Run the following command to tag and push image:
+
+`docker tag jvalance/sampledockerfiles anchorecontainerregistry001.azurecr.io/sampledockerfiles:latest`
+
+`docker push anchorecontainerregistry001.azurecr.io/sampledockerfiles:latest`
+
+View your pushed image in ACR.
+
+Azure CLI:
+
+`az acr repository list --name anchorecontainerregistry001 --output table`
+
+Output:
+
+```
+Result
+-----------------
+sampledockerfiles
+```
+
+Now that we have an image in ACR we can add the created registry to Anchore.
+
+## Adding the created registry to Anchore
+
+With the anchore-cli we can easily add the created container registry to Anchore and analyzed the image.
+
